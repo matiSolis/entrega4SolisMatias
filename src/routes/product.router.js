@@ -1,14 +1,16 @@
 import { Router } from "express";
-import ProductManager from "../Dao/managers/productManager.js";
-import ManagerAccess from "../Dao/managers/managerAccess.js";
+import ManagerAccess from "../Dao/managers/managerAcces.js";
+import productModel from "../Dao/models/products.model.js";
+//import ProductManager from "../Dao/managers/productManager.js";
 
 const router = Router();
-const productManager = new ProductManager();
 const managerAccess = new ManagerAccess();
+//const productManager = new ProductManager();
 
 router.get('/', async (req, res)=>{
     try{
-        const products = await productManager.getProducts();
+        //MODO VIEJO
+        //const products = await productManager.getProducts();
         await managerAccess.createRecord('GET PRODUCTS');
         const limit = parseInt(req.query.limit);
         if (limit){
@@ -27,8 +29,9 @@ router.get('/', async (req, res)=>{
 router.get('/:pid', async (req, res)=>{
     try{
         await managerAccess.createRecord('GET PRODUCT BY ID');
-        const pid = req.params.pid;
-        res.status(200).send(await productManager.getProductById(pid));
+        //MODO VIEJO
+        //const pid = req.params.pid;
+        //res.status(200).send(await productManager.getProductById(pid));
     }catch (error) {
         res.status(400).send({
             status: "Error",
@@ -39,8 +42,15 @@ router.get('/:pid', async (req, res)=>{
 router.post('/' , async (req, res)=>{
     try{
         await managerAccess.createRecord('POST PRODUCTS');
-        const { title, description, price, thumbnail, code, stock } = req.body;
-        return res.status(200).send(await productManager.addProduct({ title, description, price, thumbnail, code, stock }));
+        //MODO VIEJO
+        //return res.status(200).send(await productManager.addProduct({ title, description, price, thumbnail, code, stock }));
+        const {title, description, price, thumbnail, code, stock} = req.body;
+        if (!title || !description || !price || !thumbnail || !code || !stock){
+            return res.status(400).send({error: 'Datos incompletos'});
+        }
+        const product = {title, description, price, thumbnail, code, stock};
+        const result = await productModel.create(product);
+        res.status(200).send(result);
     }catch (error){
         res.status(400).send({
             status: "Error",
@@ -51,15 +61,17 @@ router.post('/' , async (req, res)=>{
 router.delete('/:pid', async (req, res) => {
     try {
         await managerAccess.createRecord('DELETE PRODUCT');
-        const pid = req.params.pid;
-        const product = await productManager.getProductById(pid);
+        //MODO VIEJO
+        //const pid = req.params.pid;
+        //const product = await productManager.getProductById(pid);
         if (product.length === 0) {
             return res.status(400).send({
             status: "Error",
             msg: `El producto con ID: ${pid} no existe o no se pudo encontrar.`
         });
     }
-    return res.status(200).send(await productManager.deleteProduct(pid));
+    //MODO VIEJO
+    //return res.status(200).send(await productManager.deleteProduct(pid));
     } catch (error) {
     res.status(400).send({
         status: "Error",
@@ -70,9 +82,10 @@ router.delete('/:pid', async (req, res) => {
 router.put('/:pid', async (req, res)=>{
     try{
         await managerAccess.createRecord('PUT');
-        const pid = req.params.pid;
-        const updates = req.body;
-        res.status(200).send(await productManager.updateProduct(pid, updates));
+        //MODO VIEJO
+        //const pid = req.params.pid;
+        //const updates = req.body;
+        //res.status(200).send(await productManager.updateProduct(pid, updates));
     }catch (error){
         res.status(400).send({
             status: "Error",

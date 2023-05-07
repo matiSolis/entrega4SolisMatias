@@ -1,15 +1,10 @@
 import mongoose from "mongoose";
 
-const collection = 'Messages';
+const collection = 'Carts';
 
 const schema = new mongoose.Schema({
-    user:{
-        type: String,
-        require: true,
-        unique: true
-    },
-    message:{
-        type: String,
+    products:{
+        type: Array,
         require: true
     }
 });

@@ -6,8 +6,9 @@ const productManager = new ProductManager();
 
 router.get('/realTimeProducts', async (req, res) => {
 try {
-    let allProducts = await productManager.getProducts()
-    res.render('realTimeProducts', {allProducts});
+    //MODO VIEJO
+    //let allProducts = await productManager.getProducts()
+    //res.render('realTimeProducts', {allProducts});
 } catch (error) {
     res.status(400).send({
     status: "Error",
@@ -17,8 +18,9 @@ try {
 });
 
 router.get("/", async (req, res) => {
-    let allProducts = await productManager.getProducts()
-    res.render('home', {products: allProducts})
+    //MODO VIEJO
+    //let allProducts = await productManager.getProducts()
+    //res.render('home', {products: allProducts})
 })
 
 export default router;

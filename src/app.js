@@ -2,7 +2,7 @@ import express from "express";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
-import __dirname__ from "./utils.js";
+import __dirname from "./utils.js";
 import cartRouter from "./routes/cart.router.js";
 import chatRouter from "./routes/chat.router.js";
 import productRouter from "./routes/product.router.js";
@@ -50,9 +50,9 @@ io.on('connection', async Socket => {
         const products = await productManager.getProducts();
         io.emit('productList', products);
     });
-    Socket.on('message', data=>{
-        io.emit('messageLogs', messages);
-    });
+    // Socket.on('message', data=>{
+    //     io.emit('messageLogs', messages);
+    // });
     Socket.on('authenticated', (data) =>{      
         Socket.broadcast.emit('newUserConnected', data);
     });
