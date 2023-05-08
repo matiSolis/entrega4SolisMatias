@@ -7,3 +7,8 @@ Fecha: 6/5/2023 - Hora: 18:52:47 - Metodo: POST PRODUCTS
 Fecha: 6/5/2023 - Hora: 18:53:18 - Metodo: PUT
 Fecha: 6/5/2023 - Hora: 18:53:35 - Metodo: DELETE PRODUCT
 Fecha: 7/5/2023 - Hora: 16:55:04 - Metodo: POST PRODUCTS
+Fecha: 7/5/2023 - Hora: 22:44:59 - Metodo: POST PRODUCTS
+Fecha: 7/5/2023 - Hora: 22:45:11 - Metodo: POST PRODUCTS
+Fecha: 7/5/2023 - Hora: 22:54:04 - Metodo: POST PRODUCTS
+Fecha: 7/5/2023 - Hora: 23:03:11 - Metodo: GET PRODUCTS
+Fecha: 7/5/2023 - Hora: 23:04:38 - Metodo: GET PRODUCTS
