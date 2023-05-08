@@ -9,5 +9,5 @@ const schema = new mongoose.Schema({
     }
 });
 
-const messagesModel = mongoose.model(collection, schema);
-export default messagesModel;
+const cartModel = mongoose.model(collection, schema);
+export default cartModel;

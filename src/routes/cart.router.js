@@ -1,16 +1,19 @@
 import { Router } from "express";
-import CartManager from "../Dao/managers/cartManager.js";
-import ManagerAccess from "../Dao/managers/managerAcces.js";
+import ManagerAcces from "../Dao/managers/managerAcces.js";
+import cartModel from "../Dao/models/cart.model.js";
+import productModel from "../Dao/models/products.model.js";
+//import CartManager from "../Dao/managers/cartManager.js";
 
 const router = Router();
-const cartManager = new CartManager();
-const managerAccess = new ManagerAccess();
+const managerAcces = new ManagerAcces();
 
 router.get('/', async (req, res) => {
     try {
-        await managerAccess.createRecord('GET CARTS');
         //MODO VIEJO
         //return res.status(200).send(await cartManager.getCarts());
+        await managerAcces.createRecord('GET CARTS');
+        const result = await cartModel.find();
+        res.status(200).send({result});
     }catch(error){
         res.status(400).send({
             status: "Error",
@@ -18,12 +21,15 @@ router.get('/', async (req, res) => {
         });
     }
 });
-router.get('/:cid', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try{
-        await managerAccess.createRecord('GET CARTS BY ID');
         //MODO VIEJO
         //const cid = req.params.cid;
         //return res.status(200).send(await cartManager.getCartById(cid));
+        await managerAcces.createRecord('GET CART BY ID');
+        const id = req.params.id;
+        const result = await cartModel.find({_id:id});
+        res.status(200).send({result});
     }catch (error) {
         res.status(400).send({
             status: "Error",
@@ -33,9 +39,12 @@ router.get('/:cid', async (req, res) => {
 });
 router.post('/', async (req, res) => {
     try{
-        await managerAccess.createRecord('POST CART');
         //MODO VIEJO        
         //return res.status(200).send(await cartManager.addCart());
+        await managerAcces.createRecord('NEW CART CREATED');
+        const cart = {products: []};
+        const result = await cartModel.create(cart);
+        res.status(200).send({result});
     }catch (error) {
         res.status(400).send({
             status: "Error",
@@ -45,15 +54,32 @@ router.post('/', async (req, res) => {
 });
 router.post('/:cid/product/:pid', async (req, res) => {
     try{
-        await managerAccess.createRecord('POST PRODUCT IN CART');
         //MODO VIEJO
         //const idCart = req.params.cid;
         //const idProduct = req.params.pid;
-        return res.status(200).send(await cartManager.addProductToCart(idCart, idProduct));
+        const idCart = req.params.cid;
+        const idProduct = req.params.pid;
+        const findProduct = await productModel.find({_id:idProduct});
+        const findCart = await cartModel.find({_id:idCart});
+        const result = await cartModel.create({_id:idCart});
+        await managerAcces.createRecord('PUT PRODUCT IN CART');
     }catch(error) {
         res.status(400).send({
             status: "Error",
             msg: `El producto solicitado no se puede agregar en el carro indicado.`
+        });
+    }
+});
+router.delete('/:id', async (req, res) => {
+    try {
+        await managerAcces.createRecord('REMOVED CART');
+        const id = req.params.id;
+        const result = await cartModel.deleteOne({_id:id});
+        res.status(200).send({result});
+    } catch (error) {
+        res.status(400).send({
+            status: "Error",
+            msg: `El producto no se ha podido eliminar.`
         });
     }
 });

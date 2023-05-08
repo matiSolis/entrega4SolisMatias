@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-export default class ManagerAccess{
+export default class ManagerAcces{
     createRecord = async(metod)=>{
         const date = new Date().toLocaleDateString();
         const time = new Date().toLocaleTimeString();
