@@ -2,15 +2,12 @@ import { Router } from "express";
 import ManagerAcces from "../Dao/managers/managerAcces.js";
 import cartModel from "../Dao/models/cart.model.js";
 import productModel from "../Dao/models/products.model.js";
-//import CartManager from "../Dao/managers/cartManager.js";
 
 const router = Router();
 const managerAcces = new ManagerAcces();
 
 router.get('/', async (req, res) => {
     try {
-        //MODO VIEJO
-        //return res.status(200).send(await cartManager.getCarts());
         await managerAcces.createRecord('GET CARTS');
         const result = await cartModel.find();
         res.status(200).send({result});
@@ -23,9 +20,6 @@ router.get('/', async (req, res) => {
 });
 router.get('/:id', async (req, res) => {
     try{
-        //MODO VIEJO
-        //const cid = req.params.cid;
-        //return res.status(200).send(await cartManager.getCartById(cid));
         await managerAcces.createRecord('GET CART BY ID');
         const id = req.params.id;
         const result = await cartModel.find({_id:id});
@@ -39,8 +33,6 @@ router.get('/:id', async (req, res) => {
 });
 router.post('/', async (req, res) => {
     try{
-        //MODO VIEJO        
-        //return res.status(200).send(await cartManager.addCart());
         await managerAcces.createRecord('NEW CART CREATED');
         const cart = {products: []};
         const result = await cartModel.create(cart);
@@ -54,21 +46,24 @@ router.post('/', async (req, res) => {
 });
 router.post('/:cid/product/:pid', async (req, res) => {
     try{
-        //MODO VIEJO
-        //const idCart = req.params.cid;
-        //const idProduct = req.params.pid;
         const idCart = req.params.cid;
         const idProduct = req.params.pid;
+        const quantity = req.params.quantity || 1;
         const findProduct = await productModel.find({_id:idProduct});
-        const findCart = await cartModel.find({_id:idCart});
-        const result = await cartModel.create({_id:idCart});
+        const existProduct = await cartModel.find({$eq:findProduct});
+        if (!existProduct) {
+            const result = await cartModel.updateOne({_id:idCart}, {$push: {products: findProduct, quantity: quantity}});
+            res.status(200).send({result});
+        } else {
+            existProduct.quantity +=quantity;
+        }
         await managerAcces.createRecord('PUT PRODUCT IN CART');
     }catch(error) {
         res.status(400).send({
             status: "Error",
             msg: `El producto solicitado no se puede agregar en el carro indicado.`
         });
-    }
+    };
 });
 router.delete('/:id', async (req, res) => {
     try {

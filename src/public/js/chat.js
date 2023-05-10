@@ -10,29 +10,31 @@ Swal.fire({
     },
     allowOutsideClick: false,
     toast: true 
-}).then(result =>{
-    user  = result.value;
-let usuario = {
-    user: user,
-}
+    }).then(result =>{
+        user  = result.value;
+    let usuario = {
+        user: user,
+    };
     socket.emit('authenticated', usuario);
-})
+});
 chatbox.addEventListener('keyup', evt =>{
     console.log(evt);
     if(evt.key === "Enter"){
         if(chatbox.value.trim().length>0){
             socket.emit('message', {user:user, message:chatbox.value.trim()})
             chatbox.value = "";
-        }
-    }
-})
+        };
+    };
+});
 socket.on('messageLogs', data =>{
     if(!user) return;
     let log = document.getElementById('messageLogs');
     let messages = "";
-    data.forEach(message => {
-        messages +=  `${ message.user } dice: ${ message.message } <br/>  `       
-    });
+    if (Array.isArray(data)) {
+        data.forEach(message => {
+            messages +=  `${ message.user } dice: ${ message.message } <br/>  `       
+        });
+    };
     log.innerHTML = messages
 })
 socket.on('newUserConnected', data =>{

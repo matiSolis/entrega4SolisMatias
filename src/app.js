@@ -12,7 +12,7 @@ import messagesModel from "./Dao/models/messages.model.js";
 
 const PORT = process.env.PORT || 8080;
 const app = express();
-const MONGO = 'mongodb+srv://solismatiasn:sarasacoco@cluster0.2g9gvye.mongodb.net/?retryWrites=true&w=majority';
+const MONGO = 'mongodb+srv://solismatiasn:sarasacoco@cluster0.2g9gvye.mongodb.net/ecommerce?retryWrites=true&w=majority';
 const conection = mongoose.connect(MONGO);
 const server = app.listen(PORT, ()=>{
     console.log('Servidor funcionando en el puerto: '+PORT);
@@ -37,9 +37,6 @@ io.on('connection', async Socket => {
     console.log('socket connected');
     const products = await productManager.getProducts();
     io.emit('productList', products);
-    Socket.on('messageHome', data => {
-        io.emit('log', data);
-    });
     Socket.on('productAdd', async newProd=> {
         let newProduct = await productManager.addProduct(newProd);
         const products = await productManager.getProducts();
@@ -50,9 +47,12 @@ io.on('connection', async Socket => {
         const products = await productManager.getProducts();
         io.emit('productList', products);
     });
-    // Socket.on('message', data=>{
-    //     io.emit('messageLogs', messages);
-    // });
+    Socket.on('messageHome', data => {
+        io.emit('log', data);
+    });
+    Socket.on('message', data=>{
+        io.emit('messageLogs', messages);
+    });
     Socket.on('authenticated', (data) =>{      
         Socket.broadcast.emit('newUserConnected', data);
     });

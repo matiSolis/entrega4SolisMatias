@@ -4,8 +4,16 @@ const collection = 'Carts';
 
 const schema = new mongoose.Schema({
     products:{
-        type: Array,
-        require: true
+        type: [
+            {
+                product:{
+                    type: String,
+                    ref: "products",
+            },
+            quantity: Number,
+            }
+        ],
+        default: []
     }
 });
 
