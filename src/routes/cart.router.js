@@ -45,20 +45,21 @@ router.post('/', async (req, res) => {
     }
 });
 router.post('/:cid/product/:pid', async (req, res) => {
-    try{
+    try {
         const idCart = req.params.cid;
         const idProduct = req.params.pid;
-        const quantity = req.params.quantity || 1;
-        const findProduct = await productModel.find({_id:idProduct});
-        const existProduct = await cartModel.find({$eq:findProduct});
-        if (!existProduct) {
-            const result = await cartModel.updateOne({_id:idCart}, {$push: {products: findProduct, quantity: quantity}});
+        const findProduct = await productModel.findOne({_id: idProduct});
+        const alreadyInCart = await cartModel.findOne({products: {$elemMatch: {product: findProduct._id}}});
+        if (!alreadyInCart) {
+            const result = await cartModel.updateOne({_id: idCart}, {$push: {products: {product: findProduct._id, quantity: 1}}});
             res.status(200).send({result});
         } else {
-            existProduct.quantity +=quantity;
-        }
+            alreadyInCart.products.find(p => p.product.equals(findProduct._id)).quantity += 1;
+            await alreadyInCart.save();
+            res.status(200).send({result: alreadyInCart});
+        };
         await managerAcces.createRecord('PUT PRODUCT IN CART');
-    }catch(error) {
+    } catch (error) {
         res.status(400).send({
             status: "Error",
             msg: `El producto solicitado no se puede agregar en el carro indicado.`

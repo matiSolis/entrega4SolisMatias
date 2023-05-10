@@ -1,26 +1,26 @@
-import { Router } from "express";
-import ProductManager from "../Dao/managers/productManager.js";
+// import { Router } from "express";
+// import ProductManager from "../Dao/managers/productManager.js";
 
-const router = Router();
-const productManager = new ProductManager();
+// const router = Router();
+// const productManager = new ProductManager();
 
-router.get('/realTimeProducts', async (req, res) => {
-try {
-    //MODO VIEJO
-    //let allProducts = await productManager.getProducts()
-    //res.render('realTimeProducts', {allProducts});
-} catch (error) {
-    res.status(400).send({
-    status: "Error",
-    msg: `Los productos solicitados no se pueden visualizar.`
-    });
-}
-});
+// router.get('/realTimeProducts', async (req, res) => {
+// try {
+//     //MODO VIEJO
+//     //let allProducts = await productManager.getProducts()
+//     //res.render('realTimeProducts', {allProducts});
+// } catch (error) {
+//     res.status(400).send({
+//     status: "Error",
+//     msg: `Los productos solicitados no se pueden visualizar.`
+//     });
+// }
+// });
 
-router.get("/", async (req, res) => {
-    //MODO VIEJO
-    //let allProducts = await productManager.getProducts()
-    //res.render('home', {products: allProducts})
-})
+// router.get("/", async (req, res) => {
+//     //MODO VIEJO
+//     //let allProducts = await productManager.getProducts()
+//     //res.render('home', {products: allProducts})
+// })
 
-export default router;
+// export default router;

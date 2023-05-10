@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     try {
         await managerAcces.createRecord('GET MESSAGES');
         const messages = await messagesModel.find();
-        res.status(200).render({messages});
+        res.status(200).render('chat', {messages});
     }catch (err) {
         res.status(400).send({
             status: "Error",

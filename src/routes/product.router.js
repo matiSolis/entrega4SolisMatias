@@ -20,8 +20,8 @@ router.get('/', async (req, res)=>{
 router.get('/:id', async (req, res)=>{
     try{
         await managerAcces.createRecord('GET PRODUCT BY ID');
-        const id = req.params.pid;
-        const result = await productModel.find({_id:id});
+        const id = req.params.id;
+        const result = await productModel.findOne({_id:id});
         res.status(200).send({result});
     }catch (error) {
         res.status(400).send({
